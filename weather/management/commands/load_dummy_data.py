@@ -1,4 +1,5 @@
 import csv
+import os
 from weather.models import WeatherModel
 from datetime import date
 from django.utils import timezone
@@ -8,7 +9,8 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     def handle(self, **options):        
-        WeatherModel.objects.all().delete()
+        # WeatherModel.objects.all().delete()
+        os.system('./manage.py flush --noinput')
         with open('madrid.csv', 'r') as csvfile:
             lines = csv.DictReader(csvfile)
             db_lines = []
