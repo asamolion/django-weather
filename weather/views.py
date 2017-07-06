@@ -1,5 +1,6 @@
 import json
 from datetime import date
+from django.utils.dateformat import DateFormat
 from collections import OrderedDict
 from django.shortcuts import render
 from rest_framework import viewsets, mixins
@@ -32,7 +33,13 @@ class WeatherSummaryView(APIView):
         enddate = date.fromordinal(int(
             params['enddate'])) if 'enddate' in params else date.today()
         items = int(params['items']) if 'items' in params else 10
+        # summary_dict['start_date'] = DateFormat(date.fromordinal(startdate)).format('Y-m-d')
+        # summary_dict['end_date'] = DateFormat(date.fromordinal(enddate)).format('Y-m-d')
+        # summary_dict['items'] = items
         summary_dict = OrderedDict([
+            ('start_date', DateFormat(startdate).format('Y-m-d')),
+            ('end_date', DateFormat(enddate).format('Y-m-d')),
+            ('items', items),
             ('max_temp', []),
             ('mean_temp', []),
             ('min_temp', []),
@@ -65,7 +72,8 @@ class WeatherSummaryView(APIView):
             summary_dict['max_' + key] = max_
             summary_dict['mean_' + key] = mean_
             summary_dict['min_' + key] = min_
-        # min_temps = WeatherModel.objects.order_by('min_temp')[:10
+        
+        
 
         # serializer = WeatherSerializer(max_temp, many=True)
         return Response(summary_dict)
