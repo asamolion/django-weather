@@ -40,21 +40,6 @@ class WeatherSummaryView(APIView):
             ('start_date', DateFormat(startdate).format('Y-m-d')),
             ('end_date', DateFormat(enddate).format('Y-m-d')),
             ('items', items),
-            ('max_temp', []),
-            ('mean_temp', []),
-            ('min_temp', []),
-            ('max_dew', []),
-            ('mean_dew', []),
-            ('min_dew', []),
-            ('max_humidity', []),
-            ('mean_humidity', []),
-            ('min_humidity', []),
-            ('max_sea_pressure', []),
-            ('mean_sea_pressure', []),
-            ('min_sea_pressure', []),
-            ('max_visibility', []),
-            ('mean_visibility', []),
-            ('min_visibility', []),
         ])
         for key in ['temp', 'dew', 'humidity', 'sea_pressure', 'visibility']:
             max_key = 'max_' + key
@@ -69,9 +54,9 @@ class WeatherSummaryView(APIView):
 
             min_ = [getattr(instance, min_key) for instance in WeatherModel.objects.filter(
                     date__gte=startdate, date__lte=enddate).order_by(min_key)[:items]]
-            summary_dict['max_' + key] = max_
-            summary_dict['mean_' + key] = mean_
-            summary_dict['min_' + key] = min_
+            summary_dict[max_key] = max_
+            summary_dict[mean_key] = mean_
+            summary_dict[min_key] = min_
         
         
 
